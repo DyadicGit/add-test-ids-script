@@ -26,6 +26,7 @@ Of course, you can also change variables `INPUT_FOLDER`, `OUTPUT_FOLDER` to poin
 ___
 
 ##### To what HTML elements test-id's are assigned?
-Script has two lists of html elements/tags, described in [this file](transforms/constants.js): 
+Script has three lists of html elements/tags, described in [this file](transforms/constants.js): 
 * custom list of your joice `MY_TAGS` - picked by default
 * all HTML tags `HTML_TAGS` - picked when running with `--all` flag
+* MUI library tags `MUI_TAGS` - added to the list when running with `--mui` flag

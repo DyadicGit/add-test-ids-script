@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const j = require("jscodeshift");
 const { addTestIds } = require("./transforms/jsx-add-data-test-id-attribute");
-const { MY_TAGS, HTML_TAGS } = require("./transforms/constants");
+const { MY_TAGS, HTML_TAGS, MUI_TAGS  } = require("./transforms/constants");
 
 /** @typedef {{ source: string; path: string; name: string; }} InputFile*/
 
@@ -15,6 +15,7 @@ const customAttribute = process.argv
   ?.split("customAttribute=")[1];
 
 const useAllHtmlTags = process.argv.includes("--all");
+const useMuiTags = process.argv.includes("--mui");
 
 const INPUT_FOLDER = path.join(__dirname, CUSTOM_IO_FOLDER || "input");
 const OUTPUT_FOLDER = path.join(__dirname, CUSTOM_IO_FOLDER || "output");
@@ -77,11 +78,16 @@ const transform = (inputFilePath) => {
     name: kebabCaseName,
   };
 
+  let tagList = useAllHtmlTags ? HTML_TAGS : MY_TAGS;
+  if (useMuiTags) {
+    tagList = tagList.concat(MUI_TAGS);
+  }
+
   /** @type {Buffer} */
   const outputSource = addTestIds(
     file,
     j.withParser("tsx"),
-    useAllHtmlTags ? HTML_TAGS : MY_TAGS,
+    tagList,
     customAttribute
   );
   const outputFilePath = inputFilePath.replace(INPUT_FOLDER, OUTPUT_FOLDER);
